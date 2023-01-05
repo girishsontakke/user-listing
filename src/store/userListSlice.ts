@@ -7,12 +7,14 @@ interface initialStateInterface {
   error: Error | null;
   userList: User[];
   total: number;
+  per_page: number;
 }
 const initialState: initialStateInterface = {
   loading: false,
   error: null,
   userList: [],
-  total: 0
+  total: 0,
+  per_page: 0
 };
 
 const userListSlice = createSlice({
@@ -26,6 +28,7 @@ const userListSlice = createSlice({
       state.loading = false;
       state.userList = action.payload.data;
       state.total = action.payload.total;
+      state.per_page = action.payload.per_page;
     },
     fetchUserListFail: (state, action) => {
       state.loading = false;
