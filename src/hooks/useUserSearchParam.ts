@@ -8,7 +8,7 @@ function useUserSearchParam() {
     const userQuery = searchParams.get("user");
     if (userQuery != null) {
       currentUserSearchParam = parseInt(userQuery);
-    } else currentUserSearchParam = 1;
+    } else currentUserSearchParam = 0;
   } catch (error) {
     currentUserSearchParam = 0;
   }
