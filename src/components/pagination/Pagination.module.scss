@@ -2,9 +2,9 @@
   display: flex;
   list-style-type: none;
 
-  padding-inline-start: 0px !important;
-
   .paginationItem {
+    border: none;
+    background-color: #fff;
     padding: 0 12px;
     height: 32px;
     text-align: center;
@@ -67,5 +67,8 @@
         cursor: default;
       }
     }
+  }
+  .buttonsContainer {
+    display: flex;
   }
 }

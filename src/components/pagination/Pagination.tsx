@@ -7,6 +7,21 @@ interface Iprops {
   pageSize: number;
   onPageChange: (page: number) => void;
 }
+
+function handleButtonClick(
+  event: React.MouseEvent,
+  onPageChange: (page: number) => void
+) {
+  let page: string | number | undefined = (event.target as HTMLElement).dataset
+    .page;
+  try {
+    if (page !== undefined) page = parseInt(page);
+  } catch (error) {
+    page = 0;
+  }
+  typeof page === "number" && onPageChange(page);
+}
+
 function Pagination({
   totalCount,
   currentPage,
@@ -20,7 +35,7 @@ function Pagination({
   });
 
   // If there are less than 2 times in pagination range we shall not render the component
-  if (!paginationRange || currentPage === 0 || paginationRange.length < 2) {
+  if (!paginationRange || paginationRange.length < 2) {
     return null;
   }
 
@@ -34,54 +49,58 @@ function Pagination({
 
   let lastPage = paginationRange[paginationRange.length - 1];
   return (
-    <ul className={styles.paginationContainer}>
+    <div className={styles.paginationContainer}>
       {/* Left navigation arrow */}
-      <li
+      <button
         className={`${styles.paginationItem} ${
           currentPage === 1 ? styles.disabled : ""
         }`}
         onClick={onPrevious}
       >
         <div className={`${styles.arrow} ${styles.left}`} />
-      </li>
-      {paginationRange.map((pageNumber, idx) => {
-        // If the pageItem is a DOT, render the DOTS unicode character
-        if (pageNumber === DOTS) {
-          return (
-            <li
-              key={pageNumber + idx}
-              className={`${styles.paginationItem} ${styles.dots}`}
-            >
-              &#8230;
-            </li>
-          );
-        }
+      </button>
+      <div
+        className={styles.buttonsContainer}
+        onClick={(event) => handleButtonClick(event, onPageChange)}
+      >
+        {paginationRange.map((pageNumber, idx) => {
+          // If the pageItem is a DOT, render the DOTS unicode character
+          if (pageNumber === DOTS) {
+            return (
+              <button
+                key={pageNumber + idx}
+                className={`${styles.paginationItem} ${styles.dots}`}
+              >
+                &#8230;
+              </button>
+            );
+          }
 
-        // Render our Page Pills
-        return (
-          <li
-            key={pageNumber}
-            className={`${styles.paginationItem} ${
-              pageNumber === currentPage ? styles.selected : ""
-            }`}
-            onClick={() =>
-              typeof pageNumber === "number" && onPageChange(pageNumber)
-            }
-          >
-            {pageNumber}
-          </li>
-        );
-      })}
+          // Render our Page Pills
+          return (
+            <button
+              key={pageNumber}
+              className={`${styles.paginationItem} ${
+                pageNumber === currentPage ? styles.selected : ""
+              }`}
+              data-page={pageNumber}
+            >
+              {pageNumber}
+            </button>
+          );
+        })}
+      </div>
+
       {/*  Right Navigation arrow */}
-      <li
+      <button
         className={`${styles.paginationItem} ${
           currentPage === lastPage ? styles.disabled : ""
         } `}
         onClick={onNext}
       >
         <div className={`${styles.arrow} ${styles.right}`} />
-      </li>
-    </ul>
+      </button>
+    </div>
   );
 }
 
